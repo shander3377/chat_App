@@ -27,19 +27,6 @@ class GUI:
         self.go.place(relx=0.4, rely=0.55)
 
         self.Window.mainloop()
-    def recieve(self):
-        while(True):
-            try:
-                msg = client.recv(2048).decode("utf-8")
-                if msg=="NICKNAME":
-                    client.send(self.entryName.encode("utf-8"))
-                else:
-                    self.showmsg(msg)
-
-            except:
-                print("Oops! An error occured")
-                client.close()
-                break;
     def goAhead(self, name):
         self.LoginWindow.destroy()
         self.username = name
@@ -84,11 +71,25 @@ class GUI:
         self.textArea.config(state=DISABLED)
         self.textArea.see(END)
 
+    def recieve(self):
+        while(True):
+            try:
+                msg = client.recv(2048).decode("utf-8")
+                if msg=="NICKNAME":
+                    client.send(self.entryName.encode("utf-8"))
+                else:
+                    self.showmsg(msg)
+
+            except:
+                print("Oops! An error occured")
+                client.close()
+                break;
+                
     def write(self):
         self.textArea.config(state=DISABLED)
         while(True):
                 msg = "{}: {}".format(self.name, self.msg)
-                print(msg)
+                print(msg.encode("utf-8"))
                 print(client)
                 client.send(msg.encode("utf-8"))
                 self.showMsg(msg)
